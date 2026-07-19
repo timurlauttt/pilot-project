@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "symposium-cms",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  "d1_databases": [
+    {
+      "binding": "symposium_cms",
+      "database_name": "symposium-cms",
+      "database_id": "5e0520d3-0781-43c1-b71f-15a95c991797",
+    },
+  ],
+}

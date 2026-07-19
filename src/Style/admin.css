@@ -1,0 +1,55 @@
+/*
+ * shadcn/ui-style design tokens, scoped to `.admin-theme` only.
+ * Never defined on `:root` so the public marketing site is untouched.
+ */
+.admin-theme {
+	--admin-background: 0 0% 100%;
+	--admin-foreground: 222 47% 11%;
+	--admin-card: 0 0% 100%;
+	--admin-card-foreground: 222 47% 11%;
+	--admin-popover: 0 0% 100%;
+	--admin-popover-foreground: 222 47% 11%;
+	--admin-primary: 330 65% 60%;
+	--admin-primary-foreground: 0 0% 100%;
+	--admin-secondary: 210 40% 96%;
+	--admin-secondary-foreground: 222 47% 11%;
+	--admin-muted: 210 40% 96%;
+	--admin-muted-foreground: 215 16% 47%;
+	--admin-accent: 210 40% 96%;
+	--admin-accent-foreground: 222 47% 11%;
+	--admin-destructive: 0 84% 60%;
+	--admin-destructive-foreground: 0 0% 100%;
+	--admin-border: 214 32% 91%;
+	--admin-input: 214 32% 91%;
+	--admin-ring: 330 65% 60%;
+	--admin-radius: 0.625rem;
+}
+
+.dark .admin-theme {
+	--admin-background: 222 47% 6%;
+	--admin-foreground: 210 40% 98%;
+	--admin-card: 222 44% 9%;
+	--admin-card-foreground: 210 40% 98%;
+	--admin-popover: 222 44% 9%;
+	--admin-popover-foreground: 210 40% 98%;
+	--admin-primary: 330 65% 60%;
+	--admin-primary-foreground: 0 0% 100%;
+	--admin-secondary: 217 33% 17%;
+	--admin-secondary-foreground: 210 40% 98%;
+	--admin-muted: 217 33% 17%;
+	--admin-muted-foreground: 215 20% 65%;
+	--admin-accent: 217 33% 17%;
+	--admin-accent-foreground: 210 40% 98%;
+	--admin-destructive: 0 63% 31%;
+	--admin-destructive-foreground: 0 0% 100%;
+	--admin-border: 217 33% 17%;
+	--admin-input: 217 33% 17%;
+	--admin-ring: 330 65% 60%;
+}
+
+/*
+ * The .admin-theme h1/h2/h3/h4 reset (which neutralizes the public site's
+ * marketing heading styles) lives in globals.css's existing `@layer
+ * components` block instead of here — Tailwind can't resolve `@layer` inside
+ * a separately `@import`ed file that lacks its own `@tailwind components`.
+ */
