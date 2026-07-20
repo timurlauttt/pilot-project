@@ -39,3 +39,5 @@ Design and code is completely written by NextJs Templates and development team.
  - Licensed cover under [MIT]
  - Distributed by [ThemeWagon](https://themewagon.com)
 
+claude --resume 9589b439-26a1-4a46-9faf-3c8cf2c48522
+claude --resume 9589b439-26a1-4a46-9faf-3c8cf2c48522

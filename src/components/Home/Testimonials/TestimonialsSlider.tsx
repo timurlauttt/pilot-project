@@ -47,17 +47,19 @@ export function TestimonialsSlider({ testimonials }: { testimonials: ContentBloc
             {testimonials.map((testimonial) => (
                 <div key={testimonial.id}>
                     <div className="grid md:grid-cols-12 grid-cols-1 items-center">
-                        <div className="col-span-4 bg-LightSkyBlue sm:rounded-br-214 rounded-br-182 sm:rounded-tl-214 rounded-tl-182 relative before:content-[''] before:absolute before:bg-[url('/images/testimonials/quotes.png')] before:w-109 before:h-109 before:-right-10 before:top-32 lg:inline-block hidden">
-                            <Image
-                                src={testimonial.imageUrl || "/images/hero/john.png"}
-                                alt={testimonial.title || "Testimoni"}
-                                width={0}
-                                height={0}
-                                quality={100}
-                                layout="responsive"
-                                sizes="100vh"
-                                className="w-full h-full"
-                            />
+                        <div className="col-span-4 relative before:content-[''] before:absolute before:bg-[url('/images/testimonials/quotes.png')] before:w-109 before:h-109 before:-right-10 before:top-32 before:z-10 lg:inline-block hidden">
+                            <div className="bg-LightSkyBlue sm:rounded-br-214 rounded-br-182 sm:rounded-tl-214 rounded-tl-182 overflow-hidden">
+                                <Image
+                                    src={testimonial.imageUrl || "/images/hero/john.png"}
+                                    alt={testimonial.title || "Testimoni"}
+                                    width={0}
+                                    height={0}
+                                    quality={100}
+                                    layout="responsive"
+                                    sizes="100vh"
+                                    className="w-full h-full"
+                                />
+                            </div>
                         </div>
                         <div className="col-span-8 md:ml-28 ml-0">
                             <h2 className="max-w-72">Apa Kata Pasien Kami</h2>
@@ -65,16 +67,14 @@ export function TestimonialsSlider({ testimonials }: { testimonials: ContentBloc
                                 {testimonial.description}
                             </p>
                             <div className="flex items-center gap-8">
-                                <div>
+                                <div className="relative w-16 h-16 shrink-0 rounded-full overflow-hidden">
                                     <Image
                                         src={testimonial.imageUrl || "/images/testimonials/testimonials-profile.png"}
                                         alt={testimonial.title || "Pasien"}
-                                        width={0}
-                                        height={0}
+                                        fill
                                         quality={100}
-                                        layout="responsive"
-                                        sizes="100vh"
-                                        className="!w-16 !h-16 rounded-full"
+                                        sizes="64px"
+                                        className="object-cover"
                                     />
                                 </div>
                                 <div>

@@ -1,0 +1,1 @@
+ALTER TABLE `content_blocks` ADD `secondary_image_url` text;

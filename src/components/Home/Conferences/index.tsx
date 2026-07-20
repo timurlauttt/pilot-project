@@ -31,17 +31,17 @@ const Conferences = async () => {
               data-aos-delay="200"
               data-aos-duration="1000"
             >
-              <h2>Layanan Unggulan Kami</h2>
+              <h2>Solusi Perawatan Estetika Terbaik</h2>
               <p className="text-lg font-normal text-SlateBlueText dark:text-opacity-80 max-w-506 md:pt-9 pt-5 md:pb-14 pb-6">
-                Kami menghadirkan beragam perawatan kecantikan dan kesehatan kulit
-                dengan teknologi terkini, ditangani langsung oleh dokter dan
-                terapis berpengalaman.
+                Kami memadukan inovasi teknologi medis terkini dengan keahlian
+                dokter spesialis untuk memberikan hasil perawatan kulit yang
+                optimal, aman, dan dirancang khusus untuk kebutuhan Anda.
               </p>
               <Link
-                href="/documentation"
+                href="/layanan"
                 className="btn_outline btn-2 hover-outline-slide-down"
               >
-                <span>Lihat semua layanan</span>
+                <span>Eksplorasi Semua Layanan Kami</span>
               </Link>
             </div>
           </div>

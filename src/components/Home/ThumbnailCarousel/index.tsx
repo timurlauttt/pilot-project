@@ -104,16 +104,14 @@ const ThumbnailCarousel: React.FC<ThumbnailCarouselProps> = ({ images }) => {
                 <Slider {...settingsFor} ref={mainSliderRef} className="pb-3">
                     {slides.map((slide, index) => (
                         <div key={`main-${index}`}>
-                            <div className="relative rounded-lg overflow-hidden">
+                            <div className="relative aspect-[4/3] rounded-tl-[2.5rem] rounded-br-[2.5rem] overflow-hidden">
                                 <Image
                                     src={slide.src}
                                     alt={slide.alt}
-                                    width={0}
-                                    height={0}
+                                    fill
                                     quality={100}
-                                    layout="responsive"
-                                    sizes="100vh"
-                                    className="rounded-lg"
+                                    sizes="(min-width: 1024px) 40vw, 100vw"
+                                    className="object-cover"
                                 />
                                 {slide.label && (
                                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent px-6 pt-12 pb-5">
@@ -127,16 +125,16 @@ const ThumbnailCarousel: React.FC<ThumbnailCarouselProps> = ({ images }) => {
                 <Slider {...settingsNav} ref={navSliderRef} className="thumb">
                     {slides.map((slide, index) => (
                         <div key={`thumb-${index}`}>
-                            <Image
-                                src={slide.src}
-                                alt={slide.alt}
-                                width={0}
-                                height={0}
-                                quality={100}
-                                layout="responsive"
-                                sizes="100vh"
-                                className="rounded-lg"
-                            />
+                            <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                                <Image
+                                    src={slide.src}
+                                    alt={slide.alt}
+                                    fill
+                                    quality={100}
+                                    sizes="20vw"
+                                    className="object-cover"
+                                />
+                            </div>
                         </div>
                     ))}
                 </Slider>

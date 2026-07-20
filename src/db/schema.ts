@@ -21,13 +21,15 @@ export const siteSettings = sqliteTable("site_settings", {
 
 export const contentBlocks = sqliteTable("content_blocks", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
-	// 'hero' | 'about' | 'service' | 'doctor' | 'testimonial' | 'promo' | 'stat'
+	// 'hero' | 'about' | 'service' | 'doctor' | 'testimonial' | 'promo' | 'stat' | 'before_after' | 'faq'
 	blockType: text("block_type").notNull(),
 	blockKey: text("block_key").notNull().unique(),
 	title: text("title"),
 	subtitle: text("subtitle"),
 	description: text("description"),
 	imageUrl: text("image_url"),
+	// Used by 'before_after' blocks as the "after" photo (imageUrl holds the "before" photo).
+	secondaryImageUrl: text("secondary_image_url"),
 	price: integer("price"),
 	rating: integer("rating"),
 	ctaLabel: text("cta_label"),

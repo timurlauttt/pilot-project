@@ -46,3 +46,5 @@ next-env.d.ts
 
 # reference screenshots shared during development
 /image.png
+
+README.md

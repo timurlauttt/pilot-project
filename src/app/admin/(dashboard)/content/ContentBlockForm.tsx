@@ -35,6 +35,7 @@ export function ContentBlockForm({ initialData }: { initialData?: ContentBlock }
 			subtitle: initialData?.subtitle ?? "",
 			description: initialData?.description ?? "",
 			imageUrl: initialData?.imageUrl ?? "",
+			secondaryImageUrl: initialData?.secondaryImageUrl ?? "",
 			price: initialData?.price ?? undefined,
 			rating: initialData?.rating ?? undefined,
 			ctaLabel: initialData?.ctaLabel ?? "",
@@ -97,10 +98,17 @@ export function ContentBlockForm({ initialData }: { initialData?: ContentBlock }
 				<FieldError message={errors.description?.message} />
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="imageUrl">URL Gambar</Label>
-				<Input id="imageUrl" placeholder="https://i.imgur.com/xxxx.jpg" {...register("imageUrl")} />
-				<FieldError message={errors.imageUrl?.message} />
+			<div className="grid grid-cols-2 gap-4">
+				<div className="space-y-2">
+					<Label htmlFor="imageUrl">URL Gambar {"("}Utama / "Sebelum"{")"}</Label>
+					<Input id="imageUrl" placeholder="https://i.imgur.com/xxxx.jpg" {...register("imageUrl")} />
+					<FieldError message={errors.imageUrl?.message} />
+				</div>
+				<div className="space-y-2">
+					<Label htmlFor="secondaryImageUrl">URL Gambar Kedua {"("}khusus tipe before_after: "Sesudah"{")"}</Label>
+					<Input id="secondaryImageUrl" placeholder="https://i.imgur.com/xxxx.jpg" {...register("secondaryImageUrl")} />
+					<FieldError message={errors.secondaryImageUrl?.message} />
+				</div>
 			</div>
 
 			<div className="grid grid-cols-3 gap-4">

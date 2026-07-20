@@ -6,7 +6,7 @@ const dmsans = DM_Sans({ subsets: ["latin"] });
 import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
-  title: "Klinik Kecantikan",
+  title: "Klinik Estetika Persona",
 };
 
 export default function RootLayout({

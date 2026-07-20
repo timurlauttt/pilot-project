@@ -111,7 +111,7 @@ const ContactForm = ({ services, whatsappNumber }: ContactFormProps) => {
                                 height={0}
                                 quality={100}
                                 style={{ width: '100%', height: 'auto' }}
-                                className="bg-no-repeat bg-contain rounded-lg"
+                                className="bg-no-repeat bg-contain rounded-tl-[3rem] rounded-br-[3rem]"
                             />
                         </div>
                     </div>

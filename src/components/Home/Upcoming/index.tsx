@@ -13,7 +13,14 @@ const Upcoming = async () => {
       <section className="upcoming dark:bg-darkmode">
         <div className="max-w-1068 m-auto">
           <div className="container">
-            <h2 data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000" className="text-center pb-10">Promo Berjalan</h2>
+            <h2
+              data-aos="fade-up"
+              data-aos-delay="200"
+              data-aos-duration="1000"
+              className="text-center pb-10"
+            >
+              Penawaran Spesial Bulan Ini
+            </h2>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
               {promos.map((promo, index) => (
                 <div
@@ -24,7 +31,7 @@ const Upcoming = async () => {
                   className="flex items-center gap-5 border border-solid dark:border-dark_border rounded-22 p-6"
                 >
                   {promo.imageUrl && (
-                    <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden">
+                    <div className="w-24 h-24 shrink-0 rounded-tl-2xl rounded-br-2xl overflow-hidden">
                       <Image
                         src={promo.imageUrl}
                         alt={promo.title || "Promo"}

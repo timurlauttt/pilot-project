@@ -24,7 +24,7 @@ const Logo: React.FC<LogoProps> = ({ clinicName, logoUrl }) => {
 
     return (
         <Link href="/" className="text-2xl font-bold text-secondary dark:text-white">
-            {clinicName || "Klinik Kecantikan"}
+            {clinicName || "Klinik Estetika Persona"}
         </Link>
     );
 };

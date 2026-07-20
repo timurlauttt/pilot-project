@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CalendarCheck } from "lucide-react";
-import { getBlockByKey, getSiteSettings, toWhatsAppLink } from "@/lib/content";
+import { getBlockByKey, getBlocksByType, getSiteSettings, toWhatsAppLink } from "@/lib/content";
 
 function WhatsAppIcon() {
     return (
@@ -12,18 +12,46 @@ function WhatsAppIcon() {
     );
 }
 
+function formatRupiah(price: number) {
+    return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(
+        price
+    );
+}
+
+/** Forces a portrait crop for the Hero's two tall image slots, without touching the stored URL used elsewhere. */
+function toPortraitCrop(url: string) {
+    if (!url.includes("images.unsplash.com")) return url;
+    try {
+        const parsed = new URL(url);
+        parsed.searchParams.set("w", "800");
+        parsed.searchParams.set("h", "1100");
+        parsed.searchParams.set("fit", "crop");
+        return parsed.toString();
+    } catch {
+        return url;
+    }
+}
+
 const Hero = async () => {
-    const [data, settings] = await Promise.all([getBlockByKey("hero-main"), getSiteSettings()]);
+    const [data, settings, services] = await Promise.all([
+        getBlockByKey("hero-main"),
+        getSiteSettings(),
+        getBlocksByType("service"),
+    ]);
 
     const title = data?.title || "Perawatan Kecantikan Terpercaya";
-    const subtitle = data?.subtitle || "Klinik Kecantikan";
+    const subtitle = data?.subtitle || "Klinik Estetika Persona";
     const description =
         data?.description ||
         "Konsultasikan kebutuhan perawatan kulit dan kecantikan Anda bersama dokter berpengalaman kami.";
     const ctaLabel = data?.ctaLabel || "Booking Sekarang";
     const ctaLink = data?.ctaLink || "/contact";
     const waLink = toWhatsAppLink(settings?.whatsappNumber, "Halo, saya ingin konsultasi perawatan kecantikan.");
-    const heroImage = data?.imageUrl || "/images/hero/john.png";
+
+    const featuredServices = services.filter((s) => s.imageUrl && s.price != null).slice(0, 2);
+    const [primaryService, secondaryService] = featuredServices;
+    const primaryImage = toPortraitCrop(primaryService?.imageUrl || data?.imageUrl || "/images/hero/john.png");
+    const secondaryImage = toPortraitCrop(secondaryService?.imageUrl || "/images/hero/maria.png");
 
     return (
         <section className="pt-32 dark:bg-darkmode">
@@ -88,19 +116,51 @@ const Hero = async () => {
                         data-aos="fade-left"
                         data-aos-delay="200"
                         data-aos-duration="1000"
-                        className="col-span-6 lg:block hidden"
+                        className="col-span-6 lg:flex hidden items-center gap-3"
                     >
-                        <div className="bg-ElectricAqua relative rounded-tl-166 rounded-br-166 w-full">
-                            <Image
-                                src={heroImage}
-                                alt={title}
-                                width={0}
-                                height={0}
-                                quality={100}
-                                layout="responsive"
-                                sizes="100vh"
-                                className="w-full h-full"
-                            />
+                        <div className="relative w-full">
+                            <div className="bg-ElectricAqua relative rounded-tl-166 rounded-br-166 overflow-hidden w-full">
+                                <Image
+                                    src={primaryImage}
+                                    alt={primaryService?.title || title}
+                                    width={0}
+                                    height={0}
+                                    quality={100}
+                                    layout="responsive"
+                                    sizes="100vh"
+                                    className="w-full h-full"
+                                />
+                            </div>
+                            {primaryService && (
+                                <div className="bg-yellow-300 rounded-22 shadow-hero-box py-4 px-5 absolute top-16 -left-20 z-10">
+                                    <p className="text-lg font-bold text-yellow-900">{primaryService.title}</p>
+                                    <p className="text-base font-medium text-yellow-900 text-center">
+                                        {formatRupiah(primaryService.price as number)}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="relative w-full mt-32">
+                            <div className="bg-primary relative rounded-tr-166 rounded-bl-166 overflow-hidden w-full">
+                                <Image
+                                    src={secondaryImage}
+                                    alt={secondaryService?.title || title}
+                                    width={0}
+                                    height={0}
+                                    quality={100}
+                                    layout="responsive"
+                                    sizes="100vh"
+                                    className="w-full h-full"
+                                />
+                            </div>
+                            {secondaryService && (
+                                <div className="bg-Aquamarine rounded-22 shadow-hero-box py-4 px-5 absolute top-24 -right-20 z-10 xl:inline-block hidden">
+                                    <p className="text-lg font-bold text-green-800">{secondaryService.title}</p>
+                                    <p className="text-base font-medium text-green-800 text-center">
+                                        {formatRupiah(secondaryService.price as number)}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

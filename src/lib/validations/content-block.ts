@@ -1,6 +1,16 @@
 import { z } from "zod";
 
-export const blockTypes = ["hero", "about", "service", "doctor", "testimonial", "promo", "stat"] as const;
+export const blockTypes = [
+	"hero",
+	"about",
+	"service",
+	"doctor",
+	"testimonial",
+	"promo",
+	"stat",
+	"before_after",
+	"faq",
+] as const;
 
 const optionalUrl = z
 	.string()
@@ -21,6 +31,7 @@ export const contentBlockSchema = z.object({
 	subtitle: z.string().trim().optional(),
 	description: z.string().trim().optional(),
 	imageUrl: optionalUrl,
+	secondaryImageUrl: optionalUrl,
 	price: z.coerce.number().int().nonnegative().optional().nullable(),
 	rating: z.coerce.number().int().min(0).max(5).optional().nullable(),
 	ctaLabel: z.string().trim().optional(),

@@ -35,7 +35,7 @@ const Footer = async () => {
                                 />
                             ) : (
                                 <span className="text-2xl font-bold text-white">
-                                    {settings?.clinicName || "Klinik Kecantikan"}
+                                    {settings?.clinicName || "Klinik Estetika Persona"}
                                 </span>
                             )}
                         </Link>

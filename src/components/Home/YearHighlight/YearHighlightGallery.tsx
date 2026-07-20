@@ -26,7 +26,7 @@ const YearHighlightGallery = () => {
                     layout="responsive"
                     quality={100}
                     sizes="100vh"
-                    className="rounded-22"
+                    className="rounded-tl-[3rem] rounded-br-[3rem]"
                 ></Image>
                 <Link
                     href="/"
