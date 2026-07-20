@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Menu, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -19,7 +19,14 @@ import { logoutAction } from "./actions";
 
 export function Navbar({ userEmail }: { userEmail: string }) {
 	const [mobileOpen, setMobileOpen] = useState(false);
+	const [isLoggingOut, startLogoutTransition] = useTransition();
 	const initial = userEmail.charAt(0).toUpperCase();
+
+	function handleLogout() {
+		startLogoutTransition(async () => {
+			await logoutAction();
+		});
+	}
 
 	return (
 		<header className="flex h-16 items-center justify-between border-b border-admin-border bg-admin-card px-4 lg:px-6">
@@ -56,14 +63,14 @@ export function Navbar({ userEmail }: { userEmail: string }) {
 					<DropdownMenuContent align="end" className="w-56">
 						<DropdownMenuLabel>{userEmail}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<form action={logoutAction}>
-							<DropdownMenuItem asChild>
-								<button type="submit" className="w-full flex items-center gap-2 text-admin-destructive">
-									<LogOut className="h-4 w-4" />
-									Logout
-								</button>
-							</DropdownMenuItem>
-						</form>
+						<DropdownMenuItem
+							onSelect={handleLogout}
+							disabled={isLoggingOut}
+							className="text-admin-destructive cursor-pointer flex items-center gap-2"
+						>
+							<LogOut className="h-4 w-4" />
+							{isLoggingOut ? "Keluar..." : "Logout"}
+						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
