@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { Menu, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -16,19 +16,19 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SidebarNav } from "./SidebarNav";
 import { ThemeToggle } from "./ThemeToggle";
-import { logoutAction } from "./actions";
 
 export function Navbar({ userEmail }: { userEmail: string }) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [isLoggingOut, startLogoutTransition] = useTransition();
 	const initial = userEmail.charAt(0).toUpperCase();
-	const router = useRouter();
 
 	function handleLogout() {
 		startLogoutTransition(async () => {
-			await logoutAction();
-			router.push("/admin/login");
-			router.refresh();
+			// Client-side signOut posts directly to /api/auth/signout (a Route Handler,
+			// same reliable code path used by sign-in) and does a full-page navigation —
+			// this avoids a Cloudflare/OpenNext issue where Set-Cookie from a Server
+			// Action wasn't reliably clearing the session cookie in production.
+			await signOut({ callbackUrl: "/admin/login" });
 		});
 	}
 
