@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Menu, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -21,10 +22,13 @@ export function Navbar({ userEmail }: { userEmail: string }) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [isLoggingOut, startLogoutTransition] = useTransition();
 	const initial = userEmail.charAt(0).toUpperCase();
+	const router = useRouter();
 
 	function handleLogout() {
 		startLogoutTransition(async () => {
 			await logoutAction();
+			router.push("/admin/login");
+			router.refresh();
 		});
 	}
 
