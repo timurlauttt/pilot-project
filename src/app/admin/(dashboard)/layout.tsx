@@ -18,7 +18,7 @@ export default async function DashboardLayout({
 		<div className="admin-theme flex min-h-screen bg-admin-background text-admin-foreground">
 			<Toaster position="top-right" />
 			<Sidebar />
-			<div className="flex flex-1 flex-col min-w-0">
+			<div className="flex flex-1 flex-col min-w-0 lg:ml-64">
 				<Navbar userEmail={session.user.email} />
 				<main className="flex-1 p-4 lg:p-8">{children}</main>
 			</div>
