@@ -20,6 +20,16 @@ const optionalUrl = z
 		message: "URL harus diawali http:// atau https://",
 	});
 
+// CTA link boleh berupa path relatif ("/contact") atau URL http(s) penuh, tapi tidak
+// boleh skema lain seperti javascript:/data: — field ini dirender langsung jadi href.
+const optionalCtaLink = z
+	.string()
+	.trim()
+	.optional()
+	.refine((val) => !val || /^(\/(?!\/)|https?:\/\/)/.test(val), {
+		message: "Harus path relatif (diawali /) atau URL http:// / https://",
+	});
+
 export const contentBlockSchema = z.object({
 	blockType: z.enum(blockTypes),
 	blockKey: z
@@ -35,7 +45,7 @@ export const contentBlockSchema = z.object({
 	price: z.coerce.number().int().nonnegative().optional().nullable(),
 	rating: z.coerce.number().int().min(0).max(5).optional().nullable(),
 	ctaLabel: z.string().trim().optional(),
-	ctaLink: z.string().trim().optional(),
+	ctaLink: optionalCtaLink,
 	sortOrder: z.coerce.number().int(),
 	isActive: z.boolean(),
 });

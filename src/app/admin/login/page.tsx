@@ -5,6 +5,7 @@ import { loginAction } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TurnstileWidget } from "@/components/admin/TurnstileWidget";
 
 export default function AdminLoginPage() {
 	const [error, formAction, isPending] = useActionState(loginAction, undefined);
@@ -29,6 +30,7 @@ export default function AdminLoginPage() {
 					<Label htmlFor="password">Password</Label>
 					<Input id="password" name="password" type="password" required autoComplete="current-password" />
 				</div>
+				<TurnstileWidget />
 				<Button type="submit" disabled={isPending} className="w-full">
 					{isPending ? "Memproses..." : "Masuk"}
 				</Button>

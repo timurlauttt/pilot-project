@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { siteSettingsSchema, type SiteSettingsInput } from "@/lib/validations/site-settings";
 import { updateSiteSettings } from "./actions";
 import type { SiteSettings } from "@/db/schema";
@@ -19,6 +20,7 @@ function FieldError({ message }: { message?: string }) {
 export function SettingsForm({ initialData }: { initialData: SiteSettings | undefined }) {
 	const {
 		register,
+		control,
 		handleSubmit,
 		formState: { errors, isSubmitting },
 	} = useForm<SiteSettingsInput>({
@@ -60,9 +62,13 @@ export function SettingsForm({ initialData }: { initialData: SiteSettings | unde
 				</div>
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="logoUrl">URL Logo</Label>
-				<Input id="logoUrl" placeholder="https://i.imgur.com/logo.png" {...register("logoUrl")} />
+			<div>
+				<ImageUploadField
+					control={control}
+					name="logoUrl"
+					label="URL Logo"
+					placeholder="https://i.imgur.com/logo.png"
+				/>
 				<FieldError message={errors.logoUrl?.message} />
 			</div>
 

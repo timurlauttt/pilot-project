@@ -24,10 +24,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 				const adminPasswordHash = env.ADMIN_PASSWORD_HASH;
 				if (!adminEmail || !adminPasswordHash) return null;
 
-				if (email.toLowerCase() !== adminEmail.toLowerCase()) return null;
-
-				const isValid = await verifyPassword(password, adminPasswordHash);
-				if (!isValid) return null;
+				// Selalu jalankan verifyPassword (PBKDF2) terlepas dari cocok tidaknya email,
+				// supaya waktu respons tidak membocorkan apakah email yang dicoba itu benar
+				// (mencegah user/email enumeration lewat timing attack).
+				const emailMatches = email.toLowerCase() === adminEmail.toLowerCase();
+				const isPasswordValid = await verifyPassword(password, adminPasswordHash);
+				if (!emailMatches || !isPasswordValid) return null;
 
 				return { id: "admin", email: adminEmail, name: "Admin" };
 			},

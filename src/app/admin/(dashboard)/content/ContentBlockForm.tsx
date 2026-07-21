@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import {
 	blockTypes,
 	contentBlockSchema,
@@ -24,6 +25,7 @@ function FieldError({ message }: { message?: string }) {
 export function ContentBlockForm({ initialData }: { initialData?: ContentBlock }) {
 	const {
 		register,
+		control,
 		handleSubmit,
 		formState: { errors, isSubmitting },
 	} = useForm<ContentBlockFormInput, unknown, ContentBlockInput>({
@@ -99,14 +101,22 @@ export function ContentBlockForm({ initialData }: { initialData?: ContentBlock }
 			</div>
 
 			<div className="grid grid-cols-2 gap-4">
-				<div className="space-y-2">
-					<Label htmlFor="imageUrl">URL Gambar {"("}Utama / "Sebelum"{")"}</Label>
-					<Input id="imageUrl" placeholder="https://i.imgur.com/xxxx.jpg" {...register("imageUrl")} />
+				<div>
+					<ImageUploadField
+						control={control}
+						name="imageUrl"
+						label={`URL Gambar (Utama / "Sebelum")`}
+						placeholder="https://i.imgur.com/xxxx.jpg"
+					/>
 					<FieldError message={errors.imageUrl?.message} />
 				</div>
-				<div className="space-y-2">
-					<Label htmlFor="secondaryImageUrl">URL Gambar Kedua {"("}khusus tipe before_after: "Sesudah"{")"}</Label>
-					<Input id="secondaryImageUrl" placeholder="https://i.imgur.com/xxxx.jpg" {...register("secondaryImageUrl")} />
+				<div>
+					<ImageUploadField
+						control={control}
+						name="secondaryImageUrl"
+						label={`URL Gambar Kedua (khusus tipe before_after: "Sesudah")`}
+						placeholder="https://i.imgur.com/xxxx.jpg"
+					/>
 					<FieldError message={errors.secondaryImageUrl?.message} />
 				</div>
 			</div>
