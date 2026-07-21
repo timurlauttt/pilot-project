@@ -3,59 +3,43 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { auth } from "@/auth";
 
-const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 
-function extensionFor(mimeType: string) {
-  switch (mimeType) {
-    case "image/jpeg":
-      return "jpg";
-    case "image/png":
-      return "png";
-    case "image/webp":
-      return "webp";
-    case "image/gif":
-      return "gif";
-    default:
-      return "bin";
+// Tentukan tipe gambar murni dari byte pertama file (magic number), bukan dari
+// `file.type` yang dikirim browser — browser biasanya menebak MIME type dari
+// ekstensi nama file, jadi bisa salah kalau ekstensinya tidak sesuai isi aslinya.
+function detectImageType(bytes: Uint8Array): { mimeType: string; extension: string } | null {
+  if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+    return { mimeType: "image/jpeg", extension: "jpg" };
   }
-}
-
-// Cek byte pertama file (magic number), bukan cuma percaya `file.type` yang
-// dikirim klien — klien bisa mengklaim MIME type apa saja untuk file apa saja.
-function matchesSignature(bytes: Uint8Array, mimeType: string): boolean {
-  switch (mimeType) {
-    case "image/jpeg":
-      return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
-    case "image/png":
-      return (
-        bytes[0] === 0x89 &&
-        bytes[1] === 0x50 &&
-        bytes[2] === 0x4e &&
-        bytes[3] === 0x47 &&
-        bytes[4] === 0x0d &&
-        bytes[5] === 0x0a &&
-        bytes[6] === 0x1a &&
-        bytes[7] === 0x0a
-      );
-    case "image/gif":
-      return (
-        bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x38
-      );
-    case "image/webp":
-      return (
-        bytes[0] === 0x52 &&
-        bytes[1] === 0x49 &&
-        bytes[2] === 0x46 &&
-        bytes[3] === 0x46 &&
-        bytes[8] === 0x57 &&
-        bytes[9] === 0x45 &&
-        bytes[10] === 0x42 &&
-        bytes[11] === 0x50
-      );
-    default:
-      return false;
+  if (
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47 &&
+    bytes[4] === 0x0d &&
+    bytes[5] === 0x0a &&
+    bytes[6] === 0x1a &&
+    bytes[7] === 0x0a
+  ) {
+    return { mimeType: "image/png", extension: "png" };
   }
+  if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x38) {
+    return { mimeType: "image/gif", extension: "gif" };
+  }
+  if (
+    bytes[0] === 0x52 &&
+    bytes[1] === 0x49 &&
+    bytes[2] === 0x46 &&
+    bytes[3] === 0x46 &&
+    bytes[8] === 0x57 &&
+    bytes[9] === 0x45 &&
+    bytes[10] === 0x42 &&
+    bytes[11] === 0x50
+  ) {
+    return { mimeType: "image/webp", extension: "webp" };
+  }
+  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -77,13 +61,6 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json({ error: "File tidak ditemukan" }, { status: 400 });
-    }
-
-    if (!ALLOWED_TYPES.has(file.type)) {
-      return NextResponse.json(
-        { error: "Tipe file tidak didukung. Gunakan JPG, PNG, WEBP, atau GIF." },
-        { status: 400 },
-      );
     }
 
     if (file.size > MAX_SIZE_BYTES) {
@@ -109,24 +86,25 @@ export async function POST(request: NextRequest) {
     });
 
     const bytes = new Uint8Array(await file.arrayBuffer());
+    const detected = detectImageType(bytes);
 
-    if (!matchesSignature(bytes, file.type)) {
+    if (!detected) {
       return NextResponse.json(
-        { error: "Isi file tidak sesuai dengan tipe yang diklaim" },
+        { error: "File bukan gambar yang didukung (JPG, PNG, WEBP, atau GIF)" },
         { status: 400 },
       );
     }
 
     // Nama file dibuat dari timestamp + random, bukan dari nama asli file, supaya
     // tidak ada celah path traversal atau karakter aneh dari input pengguna.
-    const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}.${extensionFor(file.type)}`;
+    const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}.${detected.extension}`;
 
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: uniqueFileName,
         Body: bytes,
-        ContentType: file.type,
+        ContentType: detected.mimeType,
         CacheControl: "public, max-age=31536000, immutable",
       }),
     );
